@@ -1,0 +1,57 @@
+[
+    {
+    "id": 1,
+    "name": "Anthony Edward Stark",
+    "email": "tony@ironman.com",
+    "address": "Stark Tower, Midtown Manhattan, New York City, USA",
+    "skills": [
+      {
+        "technology": "Html5",
+        "rate": 4
+      },
+      {
+        "technology": "CSS3",
+        "rate": 7
+      },
+      {
+        "technology": "Javascript",
+        "rate": 8
+      },
+      {
+        "technology": "Java",
+        "rate": 4
+      },
+      {
+        "technology": "ASP",
+        "rate": 10
+      },
+      {
+        "technology": "COBOL",
+        "rate": 1
+      }
+    ],
+    "jobs": [
+      {
+        "title": "Front End Developer",
+        "company": "Avenger Company",
+        "year": "3 years"
+      },
+      {
+        "title": "UI/UX Developer",
+        "company": "Stark Industries Company",
+        "year": "4 years"
+      },
+      {
+        "title": "Graphic Designer",
+        "company": "Stark Industries Company",
+        "year": "2 years"
+      },
+      {
+        "title": "Singer",
+        "company": "Broadway",
+        "year": "4 years"
+      }
+    ],
+    "photo":"assets/images/tony.jpg"
+  }
+]
