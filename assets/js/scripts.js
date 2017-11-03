@@ -40,17 +40,9 @@ var app = new Vue({
     }
 
     if(session == 'true') {
-      this.loginStatus =  false
-      this.profileStatus =  false
-      this.landingPage = true
-      this.bookmarkpage = false
+      this.loginNow();
     } else {
-      this.loginStatus =  true
-      this.profileStatus =  false
-      this.landingPage = false
-      this.bookmarkpage = false
-      this.mobileMenu = false
-      this.fixed = false
+      this.logOutNow();
     }
   },
   methods: {
