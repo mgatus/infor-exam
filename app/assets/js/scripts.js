@@ -56,7 +56,7 @@ var app = new Vue({
   computed: {
     filteredJobs: function() {
       return this.jobsList.filter((job) => {
-        let searchFilters = ['company', 'description', 'excerpt', 'name'];
+        let searchFilters = ['company', 'description', 'excerpt', 'name','salary'];
 
         var result = true;
 
