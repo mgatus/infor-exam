@@ -153,12 +153,54 @@ body #landingPageComponent .jobs .rating, body #bookmarks .jobs .rating {
   margin: 10px 0;
 }
 
+body #landingPageComponent .jobs .salary, body #bookmarks .jobs .salary {
+  margin: 0 0 15px;
+}
+
 body #landingPageComponent .emptybookmark, body #bookmarks .emptybookmark {
   margin: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+}
+
+body #landingPageComponent .paginate-links.filteredJobs, body #bookmarks .paginate-links.filteredJobs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body #landingPageComponent .paginate-links.filteredJobs li.number, body #bookmarks .paginate-links.filteredJobs li.number {
+  padding: 0 !important;
+  margin: 0 !important;
+  min-width: auto;
+  background: #fff;
+}
+
+body #landingPageComponent .paginate-links.filteredJobs li.number.active a, body #bookmarks .paginate-links.filteredJobs li.number.active a {
+  color: #f50058;
+}
+
+body #landingPageComponent .paginate-links.filteredJobs li.number a, body #bookmarks .paginate-links.filteredJobs li.number a {
+  display: block;
+  padding: 0;
+  margin: 0 5px;
+}
+
+body #landingPageComponent .field.filters, body #bookmarks .field.filters {
+  margin: 1% 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body #landingPageComponent .field.filters .control, body #bookmarks .field.filters .control {
+  margin: 1%;
+}
+
+body #landingPageComponent .field.filters .control .searchbox, body #bookmarks .field.filters .control .searchbox {
+  min-width: 500px;
 }
 
 body #profileUser ul {

@@ -7,16 +7,18 @@
   <!-- CSS   -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="assets/css/star-rating.min.css">
   <link rel="stylesheet" href="https://unpkg.com/vue-toastr-2/dist/vue-toastr-2.min.css">
+  <link rel="stylesheet" href="assets/css/star-rating.min.css">
+
 
   <!-- Master CSS  -->
   <link rel="stylesheet" href="assets/css/master.css">
 
   <!-- JS  -->
   <script src="assets/js/vue.js"></script>
+  <script src="assets/js/vue-paginate.js"></script>
   <script src="https://unpkg.com/vue-toastr-2/dist/vue-toastr-2.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/vue2-filters/dist/vue2-filters.min.js"></script>
 </head>
 
 <body>
@@ -26,14 +28,14 @@
         <a class="navbar-item" href="#">
             <img src="assets/images/logo.svg" alt="Talent" width="220px">
         </a>
-        <div v-if="(landingPage || profileStatus || bookmarkpage)" class="field search__module">
+        <!-- <div v-if="(landingPage || profileStatus || bookmarkpage)" class="field search__module">
           <div class="control has-icons-left has-icons-right">
             <input class="input is-small" type="text" placeholder="Search">
             <span class="icon is-small is-left">
               <i class="fa fa-search"></i>
             </span>
           </div>
-        </div>
+        </div> -->
         <div v-if="(landingPage || profileStatus || bookmarkpage)" class="navbar-burger burger" v-bind:class="{fixed:fixed}" @click.prevent="toggleMenuMobile" data-target="navMenuColordark-example">
           <span></span>
           <span></span>
@@ -48,6 +50,7 @@
         <div class="navbar-start" v-if="(landingPage || profileStatus || bookmarkpage)">
           <p class="menu-label">
             General
+
           </p>
           <a class="navbar-item" @click.prevent="loginNow" href="#"><i class="fa fa-list-ul fa-1" aria-hidden="true"></i>  Job listing</a>
           <a class="navbar-item" @click.prevent="profilePage" href="#"><i class="fa fa-user-circle" aria-hidden="true"></i>  Profile</a>
@@ -151,187 +154,256 @@
 
           <transition name="slide-fade">
             <div id="landingPageComponent" v-if="landingPage">
-              <div v-for="(job,i) in jobsList" class="jobs columns is-centered" :key="job.id">
-                <div class="column is-11">
-                  <div class="columns">
-                    <div class="column logo__container is-one-quarter">
-                      <img class="company-logo" v-bind:src="job.logo" alt="">
-                    </div>
-                    <div class="column">
-                      <h4 class="jobtitle">
-                        {{job.name}}
-                      </h4>
-                      <p>{{job.excerpt}}</p>
-                      <em class="company"><a @click.prevent>{{job.company}}</a></em>
 
-                      <div class="actions">
-                        <button type="button" name="button" class="button is-small" @click.prevent="showModalApply(job.id)"><i class="fa fa-smile-o" aria-hidden="true"></i> Apply</button>
-                        <button type="button" name="button" class="button is-small" @click.prevent="showModalInquire(job.id)"><i class="fa fa-envelope" aria-hidden="true"></i> Inquire</button>
-                        <button type="button" name="button" class="button is-small" @click.prevent="bookMark(i)"><i class="fa fa-heart" aria-hidden="true"></i></button>
+              <div class="field filters">
+
+                <div class="control">
+                  <input type="text" class="input searchbox is-primary" v-model="searchJob" placeholder="Search Job, Company, description">
+                </div>
+
+                <div class="control">
+                  <div class="select">
+                    <select id="alphabetic_search" v-model="letterSearch">
+                      <option value="">Alphabetical Search</option>
+                      <option>A</option>
+                      <option>B</option>
+                      <option>C</option>
+                      <option>D</option>
+                      <option>E</option>
+                      <option>F</option>
+                      <option>G</option>
+                      <option>H</option>
+                      <option>I</option>
+                      <option>J</option>
+                      <option>K</option>
+                      <option>L</option>
+                      <option>M</option>
+                      <option>N</option>
+                      <option>O</option>
+                      <option>P</option>
+                      <option>Q</option>
+                      <option>R</option>
+                      <option>S</option>
+                      <option>T</option>
+                      <option>U</option>
+                      <option>V</option>
+                      <option>W</option>
+                      <option>X</option>
+                      <option>Y</option>
+                      <option>Z</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control">
+                  <div class="select">
+                    <select id="orderBy" v-model="sortBy">
+                      <option value="">Filter By</option>
+                      <option value="name">Name</option>
+                      <option value="company">Company</option>
+                      <option value="rating">Rating</option>
+                      <option value="salary">Salary</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control">
+                  <div class="check">
+                    <input type="checkbox" id="checkboxOrder" v-model="ascdesc" @click="changeOrder">
+                    <label for="checkboxOrder">Toggle Ascending/Descending</label>
+                  </div>
+                </div>
+
+              </div>
+
+              <paginate-links for="filteredJobs" :async="true" :show-step-links="true"></paginate-links>
+              <paginate name="filteredJobs" :list="filteredJobs" :per="3">
+
+                  <!-- <div v-for="(job,i) in paginated('filteredJobs')" class="jobs columns is-centered" :key="job.id"> -->
+                  <div v-for="(job,i) in orderBy(paginated('filteredJobs'),sortBy,sortit)" class="jobs columns is-centered" :key="job.id">
+                  <div class="column is-11">
+                    <div class="columns">
+                      <div class="column logo__container is-one-quarter">
+                        <img class="company-logo" v-bind:src="job.logo" alt="">
                       </div>
+                      <div class="column">
+                        <h4 class="jobtitle">
+                          {{job.name}}
+                        </h4>
+                        <p>{{job.excerpt}}</p>
+                        <em class="company"><a @click.prevent>{{job.company}}</a></em>
+                        <p class="salary">{{job.salary}}</p>
 
-                      <div class="rating star-icon color-default" :class='"value-"+job.rating'>
-                        <!-- <div class="label-value">{{job.rating}}</div> -->
-                        <div class="star-container" :title='("Company rating is " + job.rating)'>
-                          <div class="star">
-                            <i class="star-empty"></i>
-                            <i class="star-half"></i>
-                            <i class="star-filled"></i>
-                          </div>
-                          <div class="star">
-                            <i class="star-empty"></i>
-                            <i class="star-half"></i>
-                            <i class="star-filled"></i>
-                          </div>
-                          <div class="star">
-                            <i class="star-empty"></i>
-                            <i class="star-half"></i>
-                            <i class="star-filled"></i>
-                          </div>
-                          <div class="star">
-                            <i class="star-empty"></i>
-                            <i class="star-half"></i>
-                            <i class="star-filled"></i>
-                          </div>
-                          <div class="star">
-                            <i class="star-empty"></i>
-                            <i class="star-half"></i>
-                            <i class="star-filled"></i>
+                        <div class="actions">
+                          <button type="button" name="button" class="button is-small" @click.prevent="showModalApply(job.id)"><i class="fa fa-smile-o" aria-hidden="true"></i> Apply</button>
+                          <button type="button" name="button" class="button is-small" @click.prevent="showModalInquire(job.id)"><i class="fa fa-envelope" aria-hidden="true"></i> Inquire</button>
+                          <button type="button" name="button" class="button is-small" @click.prevent="bookMark(i)"><i class="fa fa-heart" aria-hidden="true"></i></button>
+                        </div>
+
+                        <div class="rating star-icon color-default" :class='"value-"+job.rating'>
+                          <!-- <div class="label-value">{{job.rating}}</div> -->
+                          <div class="star-container" :title='("Company rating is " + job.rating)'>
+                            <div class="star">
+                              <i class="star-empty"></i>
+                              <i class="star-half"></i>
+                              <i class="star-filled"></i>
+                            </div>
+                            <div class="star">
+                              <i class="star-empty"></i>
+                              <i class="star-half"></i>
+                              <i class="star-filled"></i>
+                            </div>
+                            <div class="star">
+                              <i class="star-empty"></i>
+                              <i class="star-half"></i>
+                              <i class="star-filled"></i>
+                            </div>
+                            <div class="star">
+                              <i class="star-empty"></i>
+                              <i class="star-half"></i>
+                              <i class="star-filled"></i>
+                            </div>
+                            <div class="star">
+                              <i class="star-empty"></i>
+                              <i class="star-half"></i>
+                              <i class="star-filled"></i>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <transition name="slide-fade">
-                        <div v-cloak class="modalShow modal-apply" v-if="apply == job.id">
-                          <h2>{{job.name}}</h2>
+                        <transition name="slide-fade">
+                          <div v-cloak class="modalShow modal-apply" v-if="apply == job.id">
+                            <h2>{{job.name}}</h2>
 
-                          <div class="description content" v-html="job.description"></div>
+                            <div class="description content" v-html="job.description"></div>
 
-                          <div class="field is-horizontal">
-                            <div class="field-label is-normal">
+                            <div class="field is-horizontal">
+                              <div class="field-label is-normal">
+                                <label class="label">Subject</label>
+                              </div>
+                              <div class="field-body">
+                                <div class="field">
+                                  <div class="control">
+                                    <input class="input" type="text" v-bind:value="('Application for ' + job.name)">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="field is-horizontal">
+                              <div class="field-label is-normal">
+                                <label class="label">Cover Letter</label>
+                              </div>
+                              <div class="field-body">
+                                <div class="field">
+                                  <div class="control">
+                                    <textarea class="textarea" placeholder="Explain yourself"></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="field is-horizontal">
+                              <div class="field-label">
+                                <!-- Left empty for spacing -->
+                              </div>
+                              <div class="field-body">
+                                <div class="field">
+                                  <div class="control">
+                                    <button class="button is-primary">
+                                      Apply
+                                    </button>
+                                    <button @click.prevent="closeThis()" class="button is-warning">
+                                      Cancel
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                        </transition>
+
+                        <transition name="slide-fade">
+                          <div v-cloak class="modalShow modal-inquire" v-if="inquire == job.id">
+                            <h2>Inquire about the <span style="color: #ff3860">{{job.name}}</span> position</h2>
+                            <div class="field">
+                              <label class="label">Name</label>
+                              <div class="control">
+                                <input class="input" type="text" placeholder="Text input">
+                              </div>
+                            </div>
+
+                            <div class="field">
+                              <label class="label">Username</label>
+                              <div class="control has-icons-left has-icons-right">
+                                <input class="input" type="text" placeholder="Text input" value="bulma">
+                                <span class="icon is-small is-left">
+                                  <i class="fa fa-user"></i>
+                                </span>
+                                <span class="icon is-small is-right">
+                                  <i class="fa fa-check"></i>
+                                </span>
+                              </div>
+                            </div>
+
+                            <div class="field">
+                              <label class="label">Email</label>
+                              <div class="control has-icons-left has-icons-right">
+                                <input class="input" type="email" placeholder="Email input" value="hello@domain.com">
+                                <span class="icon is-small is-left">
+                                  <i class="fa fa-envelope"></i>
+                                </span>
+                                <span class="icon is-small is-right">
+                                  <i class="fa fa-warning"></i>
+                                </span>
+                              </div>
+                            </div>
+
+                            <div class="field">
                               <label class="label">Subject</label>
-                            </div>
-                            <div class="field-body">
-                              <div class="field">
-                                <div class="control">
-                                  <input class="input" type="text" v-bind:value="('Application for ' + job.name)">
+                              <div class="control">
+                                <div class="select">
+                                  <select>
+                                    <option>Select dropdown</option>
+                                    <option>With options</option>
+                                  </select>
                                 </div>
                               </div>
                             </div>
-                          </div>
 
-                          <div class="field is-horizontal">
-                            <div class="field-label is-normal">
-                              <label class="label">Cover Letter</label>
+                            <div class="field">
+                              <label class="label">Message</label>
+                              <div class="control">
+                                <textarea class="textarea" placeholder="Textarea"></textarea>
+                              </div>
                             </div>
-                            <div class="field-body">
-                              <div class="field">
-                                <div class="control">
-                                  <textarea class="textarea" placeholder="Explain yourself"></textarea>
-                                </div>
+
+                            <div class="field">
+                              <div class="control">
+                                <label class="checkbox">
+                                  <input type="checkbox">
+                                  I agree to the <a href="#">terms and conditions</a>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div class="field is-grouped">
+                              <div class="control">
+                                <button class="button is-primary">Submit</button>
+                              </div>
+                              <div class="control">
+                                <button class="button is-text" @click.prevent="closeThis()">Cancel</button>
                               </div>
                             </div>
                           </div>
-
-                          <div class="field is-horizontal">
-                            <div class="field-label">
-                              <!-- Left empty for spacing -->
-                            </div>
-                            <div class="field-body">
-                              <div class="field">
-                                <div class="control">
-                                  <button class="button is-primary">
-                                    Apply
-                                  </button>
-                                  <button @click.prevent="closeThis()" class="button is-warning">
-                                    Cancel
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                        </div>
-                      </transition>
-
-                      <transition name="slide-fade">
-                        <div v-cloak class="modalShow modal-inquire" v-if="inquire == job.id">
-                          <h2>Inquire about the <span style="color: #ff3860">{{job.name}}</span> position</h2>
-                          <div class="field">
-                            <label class="label">Name</label>
-                            <div class="control">
-                              <input class="input" type="text" placeholder="Text input">
-                            </div>
-                          </div>
-
-                          <div class="field">
-                            <label class="label">Username</label>
-                            <div class="control has-icons-left has-icons-right">
-                              <input class="input" type="text" placeholder="Text input" value="bulma">
-                              <span class="icon is-small is-left">
-                                <i class="fa fa-user"></i>
-                              </span>
-                              <span class="icon is-small is-right">
-                                <i class="fa fa-check"></i>
-                              </span>
-                            </div>
-                          </div>
-
-                          <div class="field">
-                            <label class="label">Email</label>
-                            <div class="control has-icons-left has-icons-right">
-                              <input class="input" type="email" placeholder="Email input" value="hello@domain.com">
-                              <span class="icon is-small is-left">
-                                <i class="fa fa-envelope"></i>
-                              </span>
-                              <span class="icon is-small is-right">
-                                <i class="fa fa-warning"></i>
-                              </span>
-                            </div>
-                          </div>
-
-                          <div class="field">
-                            <label class="label">Subject</label>
-                            <div class="control">
-                              <div class="select">
-                                <select>
-                                  <option>Select dropdown</option>
-                                  <option>With options</option>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div class="field">
-                            <label class="label">Message</label>
-                            <div class="control">
-                              <textarea class="textarea" placeholder="Textarea"></textarea>
-                            </div>
-                          </div>
-
-                          <div class="field">
-                            <div class="control">
-                              <label class="checkbox">
-                                <input type="checkbox">
-                                I agree to the <a href="#">terms and conditions</a>
-                              </label>
-                            </div>
-                          </div>
-
-                          <div class="field is-grouped">
-                            <div class="control">
-                              <button class="button is-primary">Submit</button>
-                            </div>
-                            <div class="control">
-                              <button class="button is-text" @click.prevent="closeThis()">Cancel</button>
-                            </div>
-                          </div>
-                        </div>
-                      </transition>
+                        </transition>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </paginate>
+              <paginate-links for="filteredJobs" :async="true" :show-step-links="true"></paginate-links>
             </div>
           </transition>
 
@@ -747,7 +819,6 @@
                 </div>
             </div>
           </transition>
-
 
         </div>
       </div>

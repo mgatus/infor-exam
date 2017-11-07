@@ -25,7 +25,14 @@ var app = new Vue({
     newCompany : [],
     newJobYear: [],
     bookMarks: [],
-    type: []
+    type: [],
+    searchJob: '',
+    letterSearch: '',
+    paginate: ['filteredJobs'],
+    sortBy: '',
+    ascdesc: false,
+    sortit: 0,
+    // nofilter: true
   },
   mounted: function() {
     this.loadItems();
@@ -44,11 +51,48 @@ var app = new Vue({
     } else {
       this.logOutNow();
     }
+
+  },
+  computed: {
+    filteredJobs: function() {
+      return this.jobsList.filter((job) => {
+        let searchFilters = ['company', 'description', 'excerpt', 'name'];
+
+        var result = true;
+
+        if(this.searchJob) {
+          for(let i = 0; i < searchFilters.length; i++) {
+            result = job[searchFilters[i]].toLowerCase().indexOf(this.searchJob.toLowerCase()) > -1;
+            if(result) {
+              return result;
+            }
+          }
+        }
+
+        if(this.letterSearch) {
+          result = job.name.toLowerCase().charAt(0) == this.letterSearch.toLowerCase();
+          if(result) {
+            return result;
+          }
+        }
+
+        return result;
+      });
+    },
+
   },
   methods: {
+    changeOrder: function() {
+      if(this.ascdesc) {
+        this.sortit = 1;
+      } else {
+        this.sortit = -1;
+      }
+    },
     toggleDir: function() {
       this.rtl = this.rtl == false ? true : false;
     },
+
     toggleMenuMobile: function() {
       this.mobileMenu = this.mobileMenu == false ? true : false;
       this.fixed = this.fixed == false ? true : false;
@@ -58,7 +102,7 @@ var app = new Vue({
       this.profileStatus =  false
       this.landingPage = true
       this.bookmarkpage = false
-      sessionStorage.setItem('login', 'true');
+      sessionStorage.setItem('login', 'true')
     },
     logOutNow: function() {
       this.loginStatus =  true
@@ -67,7 +111,9 @@ var app = new Vue({
       this.bookmarkpage = false
       this.mobileMenu = false
       this.fixed = false
-      sessionStorage.clear();
+      this.emptybookmark = false
+      localStorage.removeItem('bookmark')
+      sessionStorage.clear()
     },
     showBookmark: function() {
       this.loginStatus =  false
@@ -177,7 +223,7 @@ var app = new Vue({
     },
     saveProfile: function() {
       let self = this;
-      let newData = this.parseData();
+      let newData = self.parseData();
       //alert(self.skills[0])
       if(newData[0].id == self.profileInfo[0].id){
         newData[0].name = self.newValName;
@@ -188,17 +234,17 @@ var app = new Vue({
           // alert(self.tech[s]);
           newData[0].skills[s]['technology'] = self.newTech[s];
           newData[0].skills[s]['rate'] = self.newRate[s];
-        }
 
-        for(let s = 0; s < newData[0].jobs.length; s++) {
-          // alert(self.tech[s]);
-          newData[0].jobs[s]['title'] = self.newJobTitle[s];
-          newData[0].jobs[s]['company'] = self.newCompany[s];
-          newData[0].jobs[s]['year'] = self.newJobYear[s];
+          for(let s = 0; s < newData[0].jobs.length; s++) {
+            // alert(self.tech[s]);
+            newData[0].jobs[s]['title'] = self.newJobTitle[s];
+            newData[0].jobs[s]['company'] = self.newCompany[s];
+            newData[0].jobs[s]['year'] = self.newJobYear[s];
+          }
         }
         //newData[i].skills[0]['technology'] = 'java';
       } else {
-        console.log('no data');
+        self.$toastr.warning('See a doctor', 'No Data', {timeOut: 1000});
       }
 
       self.profileInfo = newData;
@@ -221,7 +267,7 @@ var app = new Vue({
       if(localBooked) {
         for(let b = 0; b < localBooked.length; b++) {
           if(localBooked[b].id == self.jobsList[i].id) {
-            this.$toastr.warning('See bookmarks section, Goodbye!', 'Already added', {timeOut: 1000});
+            self.$toastr.warning('See bookmarks section, Goodbye!', 'Already added', {timeOut: 1000});
             return false;
           }
         }
@@ -236,9 +282,9 @@ var app = new Vue({
         rating: self.jobsList[i].rating
       });
       self.type[i] = false;
+      self.emptyBookmark = false
       localStorage.setItem('bookmark',JSON.stringify(booked));
-      this.emptyBookmark = false
-      this.$toastr.success('See bookmarks section ', 'Added', {timeOut: 1000});
+      self.$toastr.success('See bookmarks section ', 'Added', {timeOut: 1000});
     }
   },
 

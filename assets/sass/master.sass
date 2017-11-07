@@ -112,12 +112,42 @@ body
         justify-content: left
         margin: 10px 0
 
+      .salary
+        margin: 0 0 15px
+
     .emptybookmark
       margin: 30px
       display: flex
       justify-content: center
       align-items: center
       height: 100vh
+
+    .paginate-links.filteredJobs
+      display: flex
+      align-items: center
+      justify-content: center
+      li.number
+        padding: 0 !important
+        margin: 0 !important
+        min-width: auto
+        background: #fff
+        &.active
+          a
+            color: #f50058
+        a
+          display: block
+          padding: 0
+          margin: 0 5px
+
+    .field.filters
+      margin: 1% 0
+      display: flex
+      align-items: center
+      justify-content: center
+      .control
+        margin: 1%
+        .searchbox
+          min-width: 500px
 
   #profileUser
     ul
@@ -197,6 +227,8 @@ body
       margin-bottom: 30px
     label
       color: #656565
+
+
 
   [v-cloak]
     display: none
