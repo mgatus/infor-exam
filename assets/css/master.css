@@ -190,9 +190,6 @@ body #landingPageComponent .paginate-links.filteredJobs li.number a, body #bookm
 
 body #landingPageComponent .field.filters, body #bookmarks .field.filters {
   margin: 1% 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 body #landingPageComponent .field.filters .control, body #bookmarks .field.filters .control {
@@ -201,6 +198,84 @@ body #landingPageComponent .field.filters .control, body #bookmarks .field.filte
 
 body #landingPageComponent .field.filters .control .searchbox, body #bookmarks .field.filters .control .searchbox {
   min-width: 500px;
+}
+
+body #landingPageComponent .onoffswitch, body #bookmarks .onoffswitch {
+  position: relative;
+  width: 122px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+body #landingPageComponent .onoffswitch-checkbox, body #bookmarks .onoffswitch-checkbox {
+  display: none;
+}
+
+body #landingPageComponent .onoffswitch-label, body #bookmarks .onoffswitch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #999999;
+  border-radius: 20px;
+}
+
+body #landingPageComponent .onoffswitch-inner, body #bookmarks .onoffswitch-inner {
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.1s ease-in 0s;
+}
+
+body #landingPageComponent .onoffswitch-inner:before, body #landingPageComponent .onoffswitch-inner:after, body #bookmarks .onoffswitch-inner:before, body #bookmarks .onoffswitch-inner:after {
+  display: block;
+  float: left;
+  width: 50%;
+  height: 30px;
+  padding: 0;
+  line-height: 30px;
+  font-size: 14px;
+  color: white;
+  font-family: Trebuchet, Arial, sans-serif;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+body #landingPageComponent .onoffswitch-inner:before, body #bookmarks .onoffswitch-inner:before {
+  content: "Descending";
+  padding-left: 10px;
+  background-color: #34A7C1;
+  color: #FFFFFF;
+}
+
+body #landingPageComponent .onoffswitch-inner:after, body #bookmarks .onoffswitch-inner:after {
+  content: "Ascending";
+  padding-right: 10px;
+  background-color: #EEEEEE;
+  color: #999999;
+  text-align: right;
+}
+
+body #landingPageComponent .onoffswitch-switch, body #bookmarks .onoffswitch-switch {
+  display: block;
+  width: 18px;
+  margin: 6px;
+  background: #FFFFFF;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 88px;
+  border: 2px solid #999999;
+  border-radius: 20px;
+  transition: all 0.1s ease-in 0s;
+}
+
+body #landingPageComponent .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner, body #bookmarks .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+  margin-left: 0;
+}
+
+body #landingPageComponent .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch, body #bookmarks .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+  right: 0px;
 }
 
 body #profileUser ul {

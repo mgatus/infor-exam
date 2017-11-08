@@ -56,7 +56,7 @@ var app = new Vue({
   computed: {
     filteredJobs: function() {
       return this.jobsList.filter((job) => {
-        let searchFilters = ['company', 'description', 'excerpt', 'name'];
+        let searchFilters = ['company', 'description', 'excerpt', 'name','salary'];
 
         var result = true;
 
@@ -260,26 +260,35 @@ var app = new Vue({
     savingPrivateProfile: function(value) {
       window.localStorage.setItem('profile', JSON.stringify(value));
     },
-    bookMark: function(i) {
+    bookMark: function(i,id) {
+      console.log(id);
+      // alert(id);
       let self = this;
+      //console.log(self.jobsList[i].id);
       let booked = self.bookMarks
       let localBooked = JSON.parse(window.localStorage.getItem('bookmark'));
       if(localBooked) {
         for(let b = 0; b < localBooked.length; b++) {
-          if(localBooked[b].id == self.jobsList[i].id) {
+          if(localBooked[b].id == id) {
             self.$toastr.warning('See bookmarks section, Goodbye!', 'Already added', {timeOut: 1000});
             return false;
           }
         }
       }
+      var foundObj;
+      for(let b = 0; b < self.jobsList.length; b++) {
+          if(self.jobsList[b].id == id) {
+            foundObj = self.jobsList[b];
+          }
+      }
       booked.push({
-        id: self.jobsList[i].id,
-        name: self.jobsList[i].name,
-        excerpt: self.jobsList[i].excerpt,
-        company: self.jobsList[i].company,
-        description: self.jobsList[i].description,
-        logo: self.jobsList[i].logo,
-        rating: self.jobsList[i].rating
+        id: foundObj.id,
+        name: foundObj.name,
+        excerpt: foundObj.excerpt,
+        company: foundObj.company,
+        description: foundObj.description,
+        logo: foundObj.logo,
+        rating: foundObj.rating
       });
       self.type[i] = false;
       self.emptyBookmark = false

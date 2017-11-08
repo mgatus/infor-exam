@@ -155,13 +155,13 @@
           <transition name="slide-fade">
             <div id="landingPageComponent" v-if="landingPage">
 
-              <div class="field filters">
+              <div class="field filters columns">
 
-                <div class="control">
+                <div class="control column">
                   <input type="text" class="input searchbox is-primary" v-model="searchJob" placeholder="Search Job, Company, description">
                 </div>
 
-                <div class="control">
+                <div class="control column">
                   <div class="select">
                     <select id="alphabetic_search" v-model="letterSearch">
                       <option value="">Alphabetical Search</option>
@@ -195,10 +195,10 @@
                   </div>
                 </div>
 
-                <div class="control">
+                <div class="control column">
                   <div class="select">
                     <select id="orderBy" v-model="sortBy">
-                      <option value="">Filter By</option>
+                      <option value="">Sort By</option>
                       <option value="name">Name</option>
                       <option value="company">Company</option>
                       <option value="rating">Rating</option>
@@ -207,10 +207,19 @@
                   </div>
                 </div>
 
-                <div class="control">
-                  <div class="check">
+                <div class="control column">
+
+                  <!-- <div class="check">
                     <input type="checkbox" id="checkboxOrder" v-model="ascdesc" @click="changeOrder">
                     <label for="checkboxOrder">Toggle Ascending/Descending</label>
+                  </div> -->
+
+                  <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" v-model="ascdesc" @click="changeOrder">
+                    <label class="onoffswitch-label" for="myonoffswitch">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
                   </div>
                 </div>
 
@@ -237,7 +246,7 @@
                         <div class="actions">
                           <button type="button" name="button" class="button is-small" @click.prevent="showModalApply(job.id)"><i class="fa fa-smile-o" aria-hidden="true"></i> Apply</button>
                           <button type="button" name="button" class="button is-small" @click.prevent="showModalInquire(job.id)"><i class="fa fa-envelope" aria-hidden="true"></i> Inquire</button>
-                          <button type="button" name="button" class="button is-small" @click.prevent="bookMark(i)"><i class="fa fa-heart" aria-hidden="true"></i></button>
+                          <button type="button" name="button" class="button is-small" @click.prevent="bookMark(i,job.id)"><i class="fa fa-heart" aria-hidden="true"></i></button>
                         </div>
 
                         <div class="rating star-icon color-default" :class='"value-"+job.rating'>

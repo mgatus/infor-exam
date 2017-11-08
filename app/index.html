@@ -198,7 +198,7 @@
                 <div class="control column">
                   <div class="select">
                     <select id="orderBy" v-model="sortBy">
-                      <option value="">Filter By</option>
+                      <option value="">Sort By</option>
                       <option value="name">Name</option>
                       <option value="company">Company</option>
                       <option value="rating">Rating</option>
@@ -246,7 +246,7 @@
                         <div class="actions">
                           <button type="button" name="button" class="button is-small" @click.prevent="showModalApply(job.id)"><i class="fa fa-smile-o" aria-hidden="true"></i> Apply</button>
                           <button type="button" name="button" class="button is-small" @click.prevent="showModalInquire(job.id)"><i class="fa fa-envelope" aria-hidden="true"></i> Inquire</button>
-                          <button type="button" name="button" class="button is-small" @click.prevent="bookMark(i)"><i class="fa fa-heart" aria-hidden="true"></i></button>
+                          <button type="button" name="button" class="button is-small" @click.prevent="bookMark(i,job.id)"><i class="fa fa-heart" aria-hidden="true"></i></button>
                         </div>
 
                         <div class="rating star-icon color-default" :class='"value-"+job.rating'>
